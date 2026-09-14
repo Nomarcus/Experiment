@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/components/AdSlot.tsx","./src/components/Orb.tsx","./src/components/Session.tsx","./src/lib/breath.test.ts","./src/lib/breath.ts","./src/lib/history.ts","./src/lib/mic.ts","./src/lib/pacing.ts","./src/lib/sound.ts"],"version":"5.9.3"}
