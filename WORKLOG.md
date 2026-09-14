@@ -32,3 +32,11 @@
 Betalning och fysisk mobilverifiering saknas. PDF-nedladdning har WinAnsi-teckengräns; utskriftsväg är dokumenterad för andra tecken. HEIC stöds inte. Profil saknar logotyp, checklistor är inte redigerbara ännu. Stora datamängder och lagringsfel behöver mer tester. Se BACKLOG.md för nästa pass.
 
 Ingen kontakt med kunder, inga annonsköp, inga betaltjänster. Inga verkliga kunduppgifter i repot.
+
+### Första leveransens avslut
+
+- GitHub CI och Pages-publicering för första huvudcommitten godkänd: körning `34868949092`.
+- Gratis betademo: https://nomarcus.github.io/Experiment/ . Använd kommersiellt lämpad hosting när riktig försäljning ska ske.
+- PDF granskad visuellt med Poppler. Fynd: ord delades mitt i vanliga ord och fotorubriken kunde bli ensam på föregående sida. Åtgärdat med ordbaserad radbrytning och separat fotodel, anpassad för två exempelbilder på samma sida. Ny tvåsidig rapport granskad utan klipp/överlapp; de fyra berörda PDF-/offline-browserfallen passerade på nytt.
+- Leveransfiler i ursprungsuppgiftens `outputs/`: skärmbilder, exempel-PDF och fristående ZIP. Endast fiktiva uppgifter.
+- Nästa pass: börja med BACKLOG.md. Efterfrågan är fortfarande en hypotes. Fokusera på konkret företagsanpassning och driftsäkerhet före fler allmänna funktioner.

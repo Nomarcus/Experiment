@@ -2,6 +2,8 @@
 
 En svensk app för små serviceföretag som behöver lämna över tydlig arbetsdokumentation till kunden. Foton, anteckningar, branschchecklistor och riktiga PDF-rapporter. Ingen inloggning, extern databas, AI-nyckel eller betald backend.
 
+**[Öppna den fria betademon](https://nomarcus.github.io/Experiment/)** · Välj ”Prova med ett exempel” för att testa direkt.
+
 **Status:** fungerande beta. Betalning är inte aktiverad och betalningsviljan är ännu inte verifierad. Namnet Klart är ett arbetsnamn, inte ett kontrollerat varumärke.
 
 ## Kör i Codespaces eller lokalt

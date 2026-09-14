@@ -23,10 +23,12 @@ export async function makePdf(p,profile) {
     const f=strong?bold:font;
     for(const paragraph of String(text).replace(/\r/g,'').split('\n')){
       let current='';
-      // Character wrapping also bounds unbroken URLs and long words.
-      for(const char of paragraph.replace(/\t/g,'    ')){
-        if(current && f.widthOfTextAtSize(current+char,size)>491){need(size*1.5);page.drawText(current,{x:52,y,size,font:f,color});y-=size*1.5;current='';}
-        current+=char;
+      const flush=()=>{need(size*1.5);if(current)page.drawText(current,{x:52,y,size,font:f,color});y-=size*1.5;current='';};
+      for(const word of paragraph.trim().split(/\s+/)){
+        const candidate=current?current+' '+word:word;
+        if(f.widthOfTextAtSize(candidate,size)<=491){current=candidate;continue;}
+        if(current)flush();
+        for(const char of word){if(current && f.widthOfTextAtSize(current+char,size)>491)flush();current+=char;}
       }
       need(size*1.5);if(current)page.drawText(current,{x:52,y,size,font:f,color});y-=size*1.5;
     }
@@ -38,10 +40,11 @@ export async function makePdf(p,profile) {
   if(p.summary){heading('Utfört arbete');wrapped(p.summary);}
   heading('Checklista · '+templates[p.template].name);
   for(const check of p.checks)wrapped((check.done?'[x] ':'[  ] ')+check.text,11);
+  if(p.photos.length)addPage();
   heading('Fotodokumentation');
   if(!p.photos.length) wrapped('Inga foton tillagda.',11,false,muted);
   for(let i=0;i<p.photos.length;i++){
-    const ph=p.photos[i];const img=await doc.embedJpg(ph.data);const scale=Math.min(491/img.width,315/img.height);const w=img.width*scale,h=img.height*scale;
+    const ph=p.photos[i];const img=await doc.embedJpg(ph.data);const scale=Math.min(491/img.width,250/img.height);const w=img.width*scale,h=img.height*scale;
     need(h+65);wrapped(`${i+1}. ${kinds[ph.kind]}`,12,true);y-=8;
     page.drawImage(img,{x:52+(491-w)/2,y:y-h,width:w,height:h});y-=h+16;
     if(ph.caption)wrapped(ph.caption,10,false,muted);y-=15;
