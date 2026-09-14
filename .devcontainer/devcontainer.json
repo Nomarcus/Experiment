@@ -1,0 +1,8 @@
+{
+  "name": "Klart development",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "forwardPorts": [4173],
+  "portsAttributes": {"4173": {"label": "Klart", "onAutoForward": "openPreview"}},
+  "postCreateCommand": "npm ci && npm run build",
+  "containerEnv": {"HOST": "0.0.0.0"}
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#123d31"><meta name="description" content="Gör tydliga arbetsrapporter av dina foton. Klart sparar lokalt, fungerar offline efter första besöket och skapar PDF till kunden.">
+  <title>Klart – foton till färdig rapport</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css">
+  <script src="vendor/pdf-lib.min.js" defer></script><script src="app.js" type="module"></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="./" aria-label="Klart, startsida"><span class="brand-icon">✓</span>klart<span class="brand-dot">.</span></a>
+      <div class="workspace-label">DIN ARBETSYTA <span class="beta">BETA</span></div>
+      <nav aria-label="Huvudmeny"><button class="nav-item active" id="nav-projects"><span>▦</span> Mina uppdrag <span class="nav-count" id="nav-count">0</span></button><button class="nav-item" id="nav-settings"><span>⚙</span> Företag & säkerhetskopia</button><button class="nav-item" id="nav-help"><span>ⓘ</span> Så fungerar Klart</button></nav>
+      <div class="sidebar-tip"><span class="tiny-label">FÄRRE ADMINMINUTER</span><p>Jobbet är gjort.<br>Låt bilderna berätta.</p><span>Från första fotot till färdig kundrapport.</span></div>
+      <div class="local-status"><span class="status-dot"></span><div id="connection">Sparas på din enhet<small>Utan konto. Utan molnlagring.</small></div></div>
+    </aside>
+    <main id="main" tabindex="-1">
+      <header class="topbar"><span>Din arbetsdag, lite enklare.</span><span class="private-badge">◉ Privat på din enhet</span></header>
+      <div id="view"></div>
+    </main>
+  </div>
+  <dialog id="dialog"><div id="dialog-content"></div></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <input type="file" id="import-file" accept="application/json,.json" hidden>
+</body>
+</html>
