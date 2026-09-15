@@ -29,10 +29,12 @@ Appen fungerar offline när appfilerna har sparats första gången. På mobiler 
 - Skapa, redigera, söka, filtrera och radera uppdrag.
 - Kund, arbetsplats, datum, beskrivning och status.
 - Checklistor för service, städning, måleri och trädgård.
+- Anpassa checklistan per uppdrag och spara upp till 50 egna mallar. Nya uppdrag får en egen kopia utan avbockningar. Ändringar i en mall påverkar inte tidigare uppdrag.
 - Foton från mobil eller fil, bildtext, före/eftermarkering och omordning.
 - Lokal automatisk lagring med felstatus och skydd mot samtidig redigering i två flikar när Web Locks finns.
 - Företagsuppgifter, rapportförhandsvisning, PDF-nedladdning och utskrift.
 - Komplett JSON-säkerhetskopia, validering och atomisk återställning med bekräftelse.
+- Säkerhetskopior i format 2 inkluderar egna mallar; äldre format 1 läses fortfarande in och behåller befintliga mallar.
 - Illustrerat exempeluppdrag tydligt märkt som exempel.
 
 ## Viktiga gränser

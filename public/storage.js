@@ -22,12 +22,23 @@ export const putProject=p=>transaction('projects','readwrite',s=>s.put(p));
 export const deleteProject=id=>transaction('projects','readwrite',s=>s.delete(id));
 export const getProfile=()=>transaction('settings','readonly',s=>s.get('profile'));
 export const putProfile=p=>transaction('settings','readwrite',s=>s.put(p,'profile'));
+export const getChecklistTemplates=async()=>await transaction('settings','readonly',s=>s.get('checklistTemplates')) || [];
+export const putChecklistTemplates=items=>transaction('settings','readwrite',s=>s.put(items,'checklistTemplates'));
 export async function importBackup(backup) {
   const db=await database();
   return new Promise((resolve,reject)=>{
     const tx=db.transaction(['projects','settings'],'readwrite');
     for(const p of backup.projects) tx.objectStore('projects').put(p);
     tx.objectStore('settings').put(backup.profile,'profile');
+    if(backup.checklistTemplates!==undefined){
+      const request=tx.objectStore('settings').get('checklistTemplates');
+      request.onsuccess=()=>{
+        const merged=new Map((request.result || []).map(t=>[t.id,t]));
+        for(const t of backup.checklistTemplates)merged.set(t.id,t);
+        if(merged.size>50){tx.abort();return;}
+        tx.objectStore('settings').put([...merged.values()],'checklistTemplates');
+      };
+    }
     tx.oncomplete=resolve;
     tx.onerror=()=>reject(new Error('Kunde inte återställa säkerhetskopian. Inga ändringar sparades.'));
     tx.onabort=()=>reject(new Error('Återställningen avbröts. Inga ändringar sparades.'));

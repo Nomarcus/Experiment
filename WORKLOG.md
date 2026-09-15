@@ -40,3 +40,13 @@ Ingen kontakt med kunder, inga annonsköp, inga betaltjänster. Inga verkliga ku
 - PDF granskad visuellt med Poppler. Fynd: ord delades mitt i vanliga ord och fotorubriken kunde bli ensam på föregående sida. Åtgärdat med ordbaserad radbrytning och separat fotodel, anpassad för två exempelbilder på samma sida. Ny tvåsidig rapport granskad utan klipp/överlapp; de fyra berörda PDF-/offline-browserfallen passerade på nytt.
 - Leveransfiler i ursprungsuppgiftens `outputs/`: skärmbilder, exempel-PDF och fristående ZIP. Endast fiktiva uppgifter.
 - Nästa pass: börja med BACKLOG.md. Efterfrågan är fortfarande en hypotes. Fokusera på konkret företagsanpassning och driftsäkerhet före fler allmänna funktioner.
+
+## 2026-09-15 — egna checklistor och mallar
+
+- Fortsatte den avbrutna uppgiften i samma arbetskopia; ingen överlappande utvecklingsprocess startades.
+- Uppdrag kan få namngivna checklistor med 1–40 moment. Oförändrade moment behåller avbockningar; nya eller omdöpta moment blir obockade.
+- Upp till 50 egna mallar kan sparas, väljas vid nytt uppdrag, redigeras och tas bort. Ändring/radering av mallar påverkar inte befintliga uppdrag.
+- Rapportförhandsvisning och PDF använder checklistans namn.
+- Backupformat 2 inkluderar mallbiblioteket. Format 1 migreras och lämnar mallbiblioteket orört. Format 2 sammanför mallar efter ID i samma transaktion som uppdrag/profil; för stor sammanslagning avbryter hela återställningen.
+- Verifierat: 7 modelltester och 14 browserfall godkända, inklusive desktop/mobil, mallarnas oberoende, PDF, format 1/2 och återställning efter radering. Bygge godkänt.
+- Fortfarande ingen extern verifiering av betalningsvilja eller aktiverad betalning. Nästa prioritet: logotyp och driftsäkerhet enligt BACKLOG.md.

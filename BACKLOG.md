@@ -4,7 +4,7 @@ Läs WORKLOG.md först. Välj den högst prioriterade, genomförbara förbättri
 
 ## Nästa pass
 
-1. Förbättra betalt värde: företagslogotyp i rapporter och redigerbara/återanvändbara checklistor. Bevara gammal backup via versionshantering/migrering. Lägg inte till molnkrav.
+1. Förbättra betalt värde: företagslogotyp i rapporter. Egna checklistor och återanvändbara mallar är nu levererade med backupmigrering. Lägg inte till molnkrav.
 2. Testa PDF med långa texter, 30–100 foton, liggande/stående bilder och långa obrutna strängar. Förbättra läsbarheten och minnesanvändningen utifrån verkliga fynd.
 3. Verifiera service-worker-uppdatering från gammal till ny version utan att lokala uppdrag tappas. Visa diskret uppdateringsstatus om det behövs.
 4. Tillgänglighet: fokus vid vybyte, upload-kontroll via tangentbord, skärmläsaretiketter och tryckytor på liten skärm.
