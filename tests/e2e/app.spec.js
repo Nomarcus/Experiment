@@ -10,6 +10,27 @@ async function create(page,title='Fönsterputs hos Öberg'){
   await page.getByRole('button',{name:'Skapa uppdrag →'}).click();
   await expect(page.getByRole('heading',{name:title,exact:true})).toBeVisible();
 }
+test('storage failure stays visible across projects and offers backup and retry',async({page})=>{
+  await create(page,'Misslyckat sparande');
+  await page.evaluate(()=>{
+    const put=IDBObjectStore.prototype.put;
+    IDBObjectStore.prototype.put=function(value,...args){
+      if(this.name==='projects' && window.failWrites){this.transaction.abort();throw new DOMException('Test quota exhausted','QuotaExceededError');}
+      return put.call(this,value,...args);
+    };window.failWrites=true;
+  });
+  await page.getByLabel('Vad vill du lämna över till kunden?').fill('Arbete som måste räddas');
+  await expect(page.locator('#save-warning')).toBeVisible();
+  await page.evaluate(()=>window.failWrites=false);
+  await page.getByRole('button',{name:'Mina uppdrag',exact:false}).click();
+  await page.getByRole('button',{name:'＋ Nytt uppdrag'}).click();await page.getByLabel('Uppdragets namn *',{exact:true}).fill('Sparat uppdrag');await page.getByRole('button',{name:'Skapa uppdrag →'}).click();
+  await page.getByLabel('Vad vill du lämna över till kunden?').fill('Detta gick bra');
+  await expect(page.locator('#save-state')).toContainText('Andra uppdrag');await expect(page.locator('#save-warning')).toBeVisible();
+  const backupEvent=page.waitForEvent('download');await page.getByRole('button',{name:'Säkerhetskopiera osparat arbete'}).click();
+  const backup=await backupEvent;const data=JSON.parse(await readFile(await backup.path(),'utf8'));expect(data.projects.find(p=>p.title==='Misslyckat sparande').summary).toBe('Arbete som måste räddas');
+  await page.getByRole('button',{name:'Försök spara igen'}).click();await expect(page.locator('#save-warning')).toBeHidden();
+  await page.reload();await page.getByRole('button',{name:/Misslyckat sparande/}).click();await expect(page.getByLabel('Vad vill du lämna över till kunden?')).toHaveValue('Arbete som måste räddas');
+});
 test('create, edit, reload, filter and safely render untrusted text',async({page})=>{
   const errors=[];page.on('pageerror',err=>errors.push(err.message));
   await create(page);

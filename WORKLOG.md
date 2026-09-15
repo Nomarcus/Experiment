@@ -59,3 +59,11 @@ Ingen kontakt med kunder, inga annonsköp, inga betaltjänster. Inga verkliga ku
 - Backupformat 3 inkluderar logotyp. Format 1 och 2 stöds fortsatt. Import tillåter bara storleksbegränsad lokal PNG-data som logotyp, inte externa URL:er eller SVG.
 - Full lokal körning: 8 modelltester och 16 browserfall godkända. Logotypfallen kontrollerar även PDF-bildobjekt, företagsuppgifter, radering och återställning. PDF-sidhuvudet har granskats med Poppler.
 - Nästa pass: lagringsfel, större fotomängder och uppdateringar offline. Inga kommersiella resultat eller extern kundvalidering har uppstått i detta pass.
+
+## 2026-09-15 — återhämtning vid lagringsfel
+
+- Fynd: global sparstatus kunde nollställas av en lyckad sparning i ett annat uppdrag, trots att ett tidigare uppdrag fortfarande hade osparade ändringar.
+- Misslyckade uppdrag spåras nu separat. En bestående varning visas över alla vyer, med nytt sparförsök och export av osparat arbete. Vanlig backup använder samma datakälla.
+- Bekräftad radering rensar motsvarande fel; backupåterställning stoppas medan osparade uppdrag finns så att de inte skrivs över av inläsningen. Varningen följer inte med vid utskrift.
+- Nytt browserfall simulerar lagringsfel, sparar ett annat uppdrag, verifierar varningen och exporten, återförsöker och verifierar innehållet efter omladdning.
+- Fortsatt arbete: avbrutna bilduppladdningar, större fotomängder och service-worker-uppdateringar återstår.

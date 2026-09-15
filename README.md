@@ -32,6 +32,7 @@ Appen fungerar offline när appfilerna har sparats första gången. På mobiler 
 - Anpassa checklistan per uppdrag och spara upp till 50 egna mallar. Nya uppdrag får en egen kopia utan avbockningar. Ändringar i en mall påverkar inte tidigare uppdrag.
 - Foton från mobil eller fil, bildtext, före/eftermarkering och omordning.
 - Lokal automatisk lagring med felstatus och skydd mot samtidig redigering i två flikar när Web Locks finns.
+- Vid misslyckad uppdragssparning ligger en varning kvar även när andra uppdrag sparas. Försök igen eller exportera en säkerhetskopia som inkluderar osparat arbete innan fliken stängs.
 - Företagsuppgifter och egen logotyp, rapportförhandsvisning, PDF-nedladdning och utskrift. Logotyp i PNG/JPG/WebP upp till 5 MB anpassas lokalt och inkluderas i rapporten.
 - Komplett JSON-säkerhetskopia, validering och atomisk återställning med bekräftelse.
 - Säkerhetskopior i format 3 inkluderar egna mallar och logotyp; äldre format 1 och 2 läses fortfarande in. Format 1 behåller befintliga mallar.
