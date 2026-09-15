@@ -50,3 +50,12 @@ Ingen kontakt med kunder, inga annonsköp, inga betaltjänster. Inga verkliga ku
 - Backupformat 2 inkluderar mallbiblioteket. Format 1 migreras och lämnar mallbiblioteket orört. Format 2 sammanför mallar efter ID i samma transaktion som uppdrag/profil; för stor sammanslagning avbryter hela återställningen.
 - Verifierat: 7 modelltester och 14 browserfall godkända, inklusive desktop/mobil, mallarnas oberoende, PDF, format 1/2 och återställning efter radering. Bygge godkänt.
 - Fortfarande ingen extern verifiering av betalningsvilja eller aktiverad betalning. Nästa prioritet: logotyp och driftsäkerhet enligt BACKLOG.md.
+
+## 2026-09-15 — logotyp i rapporter
+
+- Egen företagslogotyp kan läggas till och tas bort i inställningarna. JPG/PNG/WebP upp till 5 MB anpassas lokalt till max 640 × 320; transparent bakgrund bevaras som PNG.
+- Logotypen visas i rapportförhandsvisning/utskrift och bäddas in i PDF. PDF-textkontrollen exkluderar bilddata. Kontaktuppgifter ligger före fotodelen för att undvika en extra sida med enbart kontaktuppgifter.
+- Företagsformulärets osparade text behålls vid logotypuppladdning; efterföljande textsparande behåller logotypen.
+- Backupformat 3 inkluderar logotyp. Format 1 och 2 stöds fortsatt. Import tillåter bara storleksbegränsad lokal PNG-data som logotyp, inte externa URL:er eller SVG.
+- Full lokal körning: 8 modelltester och 16 browserfall godkända. Logotypfallen kontrollerar även PDF-bildobjekt, företagsuppgifter, radering och återställning. PDF-sidhuvudet har granskats med Poppler.
+- Nästa pass: lagringsfel, större fotomängder och uppdateringar offline. Inga kommersiella resultat eller extern kundvalidering har uppstått i detta pass.

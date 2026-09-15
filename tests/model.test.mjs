@@ -34,10 +34,17 @@ test('custom template starts fresh and has an independent checklist snapshot',()
 test('v1 migrates without deleting library; v2 validates custom checklist names and templates',()=>{
   const legacy=newProject({title:'Gammalt',template:'cleaning'});delete legacy.checklistName;
   const old=validateBackup({app:'klart',version:1,projects:[legacy],profile:{}});
-  assert.equal(old.version,2);assert.equal(old.projects[0].checklistName,'Städning');assert.equal(old.checklistTemplates,undefined);
+  assert.equal(old.version,3);assert.equal(old.projects[0].checklistName,'Städning');assert.equal(old.checklistTemplates,undefined);assert.equal(old.profile.logo,'');
   const modern={app:'klart',version:2,projects:[{...legacy,checklistName:'Kök <test>'}],profile:{},checklistTemplates:[{id:'a',name:'Flyttstädning',items:['Kyl','Frys']}]};
   assert.equal(validateBackup(modern).checklistTemplates[0].items.length,2);
   assert.throws(()=>validateBackup({...modern,checklistTemplates:[modern.checklistTemplates[0],modern.checklistTemplates[0]]}));
   assert.throws(()=>validateBackup({...modern,checklistTemplates:[{id:'a',name:'Fel',items:['Kök\nHall']}]}));
   assert.throws(()=>validateBackup({...modern,projects:[{...legacy,checklistName:9}]}));
+});
+test('logo backup accepts bounded local PNG data and rejects remote or executable sources',()=>{
+  const base={app:'klart',version:3,projects:[],checklistTemplates:[],profile:{company:'Åberg'}};
+  assert.equal(validateBackup(base).profile.logo,'');
+  for(const logo of ['https://example.com/logo.png','data:image/svg+xml;base64,AAAA','data:image/png;base64,'+'A'.repeat(1200000),{}])assert.throws(()=>validateBackup({...base,profile:{logo}}));
+  assert.equal(validateBackup({...base,profile:{logo:'data:image/png;base64,AAAA'}}).profile.logo,'data:image/png;base64,AAAA');
+  assert.equal(validateBackup({...base,version:2}).profile.logo,'');
 });

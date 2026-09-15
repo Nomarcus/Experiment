@@ -28,7 +28,7 @@ export function validateBackup(value) {
   const fail = () => {throw new Error('Filen är inte en giltig Klart-säkerhetskopia.');};
   const str = (x,n=10000) => typeof x === 'string' && x.length<=n;
   const date = x => /^\d{4}-\d{2}-\d{2}$/.test(x) && !Number.isNaN(Date.parse(x));
-  if(!value || value.app!=='klart' || ![1,2].includes(value.version) || !Array.isArray(value.projects) || value.projects.length>500) fail();
+  if(!value || value.app!=='klart' || ![1,2,3].includes(value.version) || !Array.isArray(value.projects) || value.projects.length>500) fail();
   const ids=new Set();
   const projects=value.projects.map(p=>{
     if(!p || !str(p.id,100) || !p.id || ids.has(p.id) || !str(p.title,160) || !p.title.trim() || !str(p.customer,160) || !str(p.address,240) || !str(p.summary) || !date(p.date) || !Object.hasOwn(templates,p.template) || !Object.hasOwn(statuses,p.status) || !Array.isArray(p.photos) || p.photos.length>100 || !Array.isArray(p.checks) || p.checks.length>40 || !str(p.createdAt,40) || !str(p.updatedAt,40)) fail();
@@ -44,9 +44,10 @@ export function validateBackup(value) {
     return {id:p.id,title:p.title,customer:p.customer,address:p.address,summary:p.summary,date:p.date,template:p.template,checklistName:p.checklistName || templates[p.template].name,status:p.status,photos,checks,createdAt:p.createdAt,updatedAt:p.updatedAt};
   });
   const raw=value.profile || {};
+  if(raw.logo!==undefined && raw.logo!=='' && (!str(raw.logo,1200000) || !/^data:image\/png;base64,[A-Za-z0-9+/]+={0,2}$/.test(raw.logo)))fail();
   for(const k of ['company','name','email','phone']) if(raw[k]!==undefined && !str(raw[k],240)) fail();
   let checklistTemplates;
-  if(value.version===2){
+  if(value.version>=2){
     if(!Array.isArray(value.checklistTemplates) || value.checklistTemplates.length>50) fail();
     const templateIds=new Set();
     checklistTemplates=value.checklistTemplates.map(t=>{
@@ -57,5 +58,5 @@ export function validateBackup(value) {
       return {id:t.id,name:t.name,items};
     });
   }
-  return {app:'klart',version:2,projects,checklistTemplates,profile:Object.fromEntries(['company','name','email','phone'].map(k=>[k,raw[k]||'']))};
+  return {app:'klart',version:3,projects,checklistTemplates,profile:{...Object.fromEntries(['company','name','email','phone'].map(k=>[k,raw[k]||''])),logo:raw.logo || ''}};
 }

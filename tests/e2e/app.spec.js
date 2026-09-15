@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {readFile} from 'node:fs/promises';
-import {PDFDocument} from 'pdf-lib';
+import {PDFDocument,PDFName,PDFDict} from 'pdf-lib';
 
 async function create(page,title='Fönsterputs hos Öberg'){
   await page.goto('/');await page.getByRole('button',{name:'＋ Nytt uppdrag'}).click();
@@ -98,7 +98,7 @@ test('custom checklist templates retain job snapshots, export and restore both b
   await page.getByRole('button',{name:'Företag & säkerhetskopia',exact:false}).click();
   await page.getByRole('button',{name:'Redigera mall Flyttstädning',exact:true}).click();await page.getByLabel('Arbetsmoment, ett per rad').fill('Ny kontroll för framtida jobb');await page.getByRole('button',{name:'Spara mall',exact:true}).click();
   const downloading=page.waitForEvent('download');await page.getByRole('button',{name:'↓ Ladda ner säkerhetskopia'}).click();const backup=await downloading;const json=JSON.parse(await readFile(await backup.path(),'utf8'));
-  expect(json.version).toBe(2);expect(json.checklistTemplates[0].items).toEqual(['Ny kontroll för framtida jobb']);
+  expect(json.version).toBe(3);expect(json.checklistTemplates[0].items).toEqual(['Ny kontroll för framtida jobb']);
   await page.getByRole('button',{name:'Ta bort mall Flyttstädning',exact:true}).click();await page.locator('#confirm-action').click();
   await expect(page.locator('#saved-checklists')).toContainText('Inga egna mallar');
   await page.locator('#import-file').setInputFiles({name:'modern.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(json))});await page.locator('#confirm-action').click();
@@ -108,4 +108,24 @@ test('custom checklist templates retain job snapshots, export and restore both b
   await page.locator('#import-file').setInputFiles({name:'legacy.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacy))});await page.locator('#confirm-action').click();
   await page.getByRole('button',{name:'Företag & säkerhetskopia',exact:false}).click();await expect(page.getByRole('button',{name:'Redigera mall Flyttstädning',exact:true})).toBeVisible();
   await page.reload();await page.getByRole('button',{name:/Första kunden/}).click();await expect(page.getByLabel('Utgångsläge dokumenterat',{exact:true})).toBeChecked();
+});
+test('company logo persists without losing profile edits, is embedded in PDF and restored from backup',async({page})=>{
+  await create(page,'Rapport med logotyp');
+  const png=await page.locator('h1').screenshot();
+  await page.getByRole('button',{name:'Företag & säkerhetskopia',exact:false}).click();
+  await page.getByLabel('Företagsnamn',{exact:true}).fill('Åbergs Service');
+  await page.getByLabel('Företagslogotyp',{exact:true}).setInputFiles({name:'logo.png',mimeType:'image/png',buffer:png});
+  await expect(page.getByAltText('Din sparade logotyp')).toBeVisible();
+  await expect(page.getByLabel('Företagsnamn',{exact:true})).toHaveValue('Åbergs Service');
+  await page.getByRole('button',{name:'Spara företagsuppgifter'}).click();await expect(page.locator('#toast')).toContainText('företagsuppgifter är sparade');
+  const backupEvent=page.waitForEvent('download');await page.getByRole('button',{name:'↓ Ladda ner säkerhetskopia'}).click();
+  const backup=await backupEvent;const json=JSON.parse(await readFile(await backup.path(),'utf8'));expect(json.profile.logo).toMatch(/^data:image\/png;base64,/);
+  await page.reload();await page.getByRole('button',{name:/Rapport med logotyp/}).click();await page.getByRole('button',{name:'Förhandsvisa rapport ↗'}).click();
+  await expect(page.getByAltText('Företagets logotyp')).toBeVisible();
+  const pdfEvent=page.waitForEvent('download');await page.getByRole('button',{name:'↓ Ladda ner PDF'}).click();const pdf=await pdfEvent;
+  const doc=await PDFDocument.load(await readFile(await pdf.path()));expect(doc.getAuthor()).toBe('Åbergs Service');
+  expect(doc.getPages()[0].node.Resources().lookup(PDFName.of('XObject'),PDFDict).keys().length).toBeGreaterThan(0);
+  await page.getByRole('button',{name:'Företag & säkerhetskopia',exact:false}).click();await page.getByRole('button',{name:'Ta bort logotyp',exact:true}).click();await page.locator('#confirm-action').click();await expect(page.getByAltText('Din sparade logotyp')).toHaveCount(0);
+  await page.locator('#import-file').setInputFiles({name:'logo-backup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(json))});await page.locator('#confirm-action').click();
+  await page.getByRole('button',{name:'Företag & säkerhetskopia',exact:false}).click();await expect(page.getByAltText('Din sparade logotyp')).toBeVisible();
 });
